@@ -1,0 +1,370 @@
+CREATE TABLE Agencia
+(
+NumeroAgencia INT PRIMARY KEY,
+NomeAgencia VARCHAR(25) NOT NULL,
+CNPJ_Agencia VARCHAR(15) NOT NULL,
+EnderecoAgencia VARCHAR(50) NOT NULL,
+BairroAgencia VARCHAR(512),
+FACULDADE DE TECNOLOGIA DE SÃO PAULO
+08 / 11 / 2023
+LABORATÓRIO DE BANCO DE DADOS
+PROFESSOR DR. PAULO ROBERTO BERNICE
+CEP_Agencia VARCHAR(08),
+NomeCidadeAgencia VARCHAR(30),
+UF_Agencia CHAR(02),
+)
+CREATE TABLE Cliente
+(
+NumeroCliente INT PRIMARY KEY,
+CPF_CNPJ_Cliente VARCHAR(15) NOT NULL,
+NomeCliente VARCHAR(35) NOT NULL,
+EnderecoCliente VARCHAR(50) NOT NULL,
+BairroCliente VARCHAR(512),
+CEP_Cliente VARCHAR(08),
+NomeCidadeCliente VARCHAR(30),
+UF_Cliente CHAR(02),
+)
+CREATE TABLE Conta
+(
+NumeroAgencia INT NOT NULL,
+NumeroConta INT NOT NULL,
+NumeroCliente INT NOT NULL,
+TipoConta VARCHAR(10),
+CONSTRAINT PK_Conta PRIMARY KEY(NumeroAgencia, NumeroConta),
+CONSTRAINT FK_NumeroAgencia FOREIGN KEY(NumeroAgencia) 
+REFERENCES Agencia(NumeroAgencia),
+FACULDADE DE TECNOLOGIA DE SÃO PAULO
+08 / 11 / 2023
+LABORATÓRIO DE BANCO DE DADOS
+PROFESSOR DR. PAULO ROBERTO BERNICE
+CONSTRAINT FK_NumeroCliente FOREIGN KEY(NumeroCliente) 
+REFERENCES cliente(NumeroCliente),
+)
+CREATE TABLE SaldosDiarios
+(
+NumeroAgencia INT NOT NULL,
+NumeroConta INT NOT NULL,
+DataSaldo DATE NOT NULL,
+ValorSaldoAnterior DECIMAL(10,2) NOT NULL,
+ValorSaldoData DECIMAL(10,2) NOT NULL,
+CONSTRAINT PK_SaldosDiarios PRIMARY KEY(NumeroAgencia, 
+NumeroConta, DataSaldo),
+CONSTRAINT FK1_SaldosDiarios FOREIGN KEY(NumeroAgencia, 
+NumeroConta) REFERENCES Conta(NumeroAgencia, NumeroConta)
+)
+CREATE TABLE Historico
+(
+CodigoHistorico DECIMAL(3) PRIMARY KEY,
+DescricaoHistorico VARCHAR(30),
+)
+CREATE TABLE Movimento
+(
+NumeroAgencia INT NOT NULL,
+NumeroConta INT NOT NULL,
+FACULDADE DE TECNOLOGIA DE SÃO PAULO
+08 / 11 / 2023
+LABORATÓRIO DE BANCO DE DADOS
+PROFESSOR DR. PAULO ROBERTO BERNICE
+NumeroDocumento DECIMAL(11),
+DataLancamento DATE NOT NULL,
+DataEfetivacao DATE NOT NULL,
+CodigoHistorico DECIMAL(3) NOT NULL,
+ValorLucro DECIMAL(10,2) NOT NULL,
+DescricaoBeneficiarioRemetente VARCHAR(30),
+CONSTRAINT PK_Movimento PRIMARY KEY(NumeroAgencia, 
+NumeroConta, NumeroDocumento, DataLancamento),
+CONSTRAINT FK1_Movimento FOREIGN KEY(NumeroAgencia, 
+NumeroConta) REFERENCES Conta(NumeroAgencia, NumeroConta),
+CONSTRAINT FK2_Movimento FOREIGN KEY(CodigoHistorico) 
+REFERENCES Historico(CodigoHistorico),
+)
+INSERT INTO Agencia VALUES (123,'Urb.Pindamonhangaba' , 12345678012345, 'Av 
+Tiradentes 123' , 'Bom Caifora' , 033010101, 'Pinda', 'SP')
+INSERT INTO Agencia VALUES (12,'Urb.Bom Retiro' , 12345678001234, 'Av 
+Tiradentes, 123' , 'Bom Retiro' , 01026101, 'São Paulo', 'SP')
+INSERT INTO Agencia VALUES (24,'Campinas' , 12345678002456, 'Av Frescobol, 
+24', 'Arco Iris' , 24330101, 'Campnas', 'SP')
+INSERT INTO Cliente VALUES (234, 'Casa da Vovo' , 012345678000198, 'Av 
+Tiradentes,333' , 'Bom Caifora' , 033010101, 'Pinda Paulo', 'SP')
+INSERT INTO Cliente VALUES (24,'Fernanda Lima' , 123456789000024, 'Av das 
+Loucas, 24' , 'Bons Ares' , 24330024, 'Campinas', 'SP')
+INSERT INTO Cliente VALUES (333, 'Pedro Gomes' , 009876543000021, 'Rua da 
+Consolação, 33', 'Consolação' , 02020020, 'São Paulo', 'SP')
+INSERT INTO Cliente VALUES (444, 'Maria Madalena', 331234567000089, 'Av Santo 
+Amaro, 444' , 'Santo Amaro', 05050500, 'São Paulo', 'SP')
+insert into Conta values (12, 345, 333, 'c/c')
+insert into Conta values (12, 44345, 333, 'poupança')
+FACULDADE DE TECNOLOGIA DE SÃO PAULO
+08 / 11 / 2023
+LABORATÓRIO DE BANCO DE DADOS
+PROFESSOR DR. PAULO ROBERTO BERNICE
+insert into Conta values (24, 2424, 24, 'c/c')
+insert into Conta values (123, 12345, 444, 'c/c')
+insert into Conta values (123, 234345, 234, 'c/c')
+insert into SaldosDiarios values (12, 44345, '11/01/2018', 3000.33, 3100.34)
+insert into SaldosDiarios values (12, 44345, '11/02/2018', 3100.34, 7100.34)
+insert into SaldosDiarios values (12, 44345, '11/03/2018', 7100.34, 3100.34)
+insert into SaldosDiarios values (12, 44345, '11/04/2018', 3100.34, 3100.34)
+insert into SaldosDiarios values (12, 44345, '11/05/2018', 3100.34, 53100.34)
+insert into SaldosDiarios values (12, 44345, '11/06/2018', 53100.34, 3100.34)
+insert into SaldosDiarios values (12, 345, '11/01/2018', 1000.33, 3100.34)
+insert into SaldosDiarios values (12, 345, '11/02/2018', 3100.34, 100.34)
+insert into SaldosDiarios values (12, 345, '11/03/2018', 100.34, 3100.34)
+insert into SaldosDiarios values (12, 345, '11/04/2018', 3100.34, 3100.34)
+insert into SaldosDiarios values (12, 345, '11/05/2018', 3100.34, 53100.34)
+insert into SaldosDiarios values (12, 345, '11/06/2018', 53100.34, 3100.34)
+insert into SaldosDiarios values (24, 2424, '11/01/2018', 0.33, 3100.34)
+insert into SaldosDiarios values (24, 2424, '11/02/2018', 3100.34, 3100.34)
+insert into SaldosDiarios values (24, 2424, '11/03/2018', 3100.34, 3100.34)
+insert into SaldosDiarios values (24, 2424, '11/04/2018', 3100.34, 3100.34)
+insert into SaldosDiarios values (24, 2424, '11/05/2018', 3100.34, 3100.34)
+insert into SaldosDiarios values (24, 2424, '11/06/2018', 3100.34, 3100.34)
+insert into SaldosDiarios values (123, 12345, '11/01/2018', -100.33, -100.33)
+insert into SaldosDiarios values (123, 12345, '11/02/2018', -100.33, -100.33)
+insert into SaldosDiarios values (123, 12345, '11/03/2018', -100.33, -100.33)
+insert into SaldosDiarios values (123, 12345, '11/04/2018', -100.33, -3100.34)
+insert into SaldosDiarios values (123, 12345, '11/05/2018', -3100.34, -3100.34)
+insert into SaldosDiarios values (123, 12345, '11/06/2018', -3100.34, -3100.34)
+insert into SaldosDiarios values (123, 234345, '11/01/2018', 100.33, 100.33)
+FACULDADE DE TECNOLOGIA DE SÃO PAULO
+08 / 11 / 2023
+LABORATÓRIO DE BANCO DE DADOS
+PROFESSOR DR. PAULO ROBERTO BERNICE
+insert into SaldosDiarios values (123, 234345, '11/02/2018', 100.33, 100.33)
+insert into SaldosDiarios values (123, 234345, '11/03/2018', 100.33, 100.33)
+insert into SaldosDiarios values (123, 234345, '11/04/2018', 100.33, 100.33)
+insert into SaldosDiarios values (123, 234345, '11/05/2018', 100.33, 100.33)
+insert into SaldosDiarios values (123, 234345, '11/06/2018', 100.33, 23100.33)
+insert into Historico values (1, 'deposito em dinheiro')
+insert into Historico values (2, 'deposito em cheque')
+insert into Historico values (3, 'resgate CDB')
+insert into Historico values (501, 'aplicação CDB')
+insert into Historico values (503, 'saque')
+insert into Historico values (513, 'pagamento de titulo')
+insert into Historico values (544, 'compra cartão')
+insert into Historico values (613, 'pagamento conta luz')
+insert into Movimento values (12, 44345, 00001, '11/01/2018', '11/01/2018', 001, 
+100.01, 'dep.envelope')
+insert into Movimento values (12, 44345, 00002, '11/01/2018', '11/02/2018', 001, 
+100.01, 'dep.envelope')
+insert into Movimento values (12, 44345, 00002, '11/02/2018', '11/02/2018', 001, 
+1000.00, 'dep.envelope')
+insert into Movimento values (12, 44345, 00011, '11/02/2018', '11/02/2018', 003, 
+3000.00, 'aplic.b.invest.')
+insert into Movimento values (12, 44345, 00111, '11/03/2018', '11/03/2018', 513, -
+4000.00, 'pg.tit.bco.brasil')
+insert into Movimento values (12, 44345, 00112, '11/05/2018', '11/05/2018', 002, 
+50000.00, 'efet.em outra agencia')
+insert into Movimento values (12, 44345, 00112, '11/06/2018', '11/06/2018', 503, -
+50000.00, 'pg.tit.bco.brasil')
+FACULDADE DE TECNOLOGIA DE SÃO PAULO
+08 / 11 / 2023
+LABORATÓRIO DE BANCO DE DADOS
+PROFESSOR DR. PAULO ROBERTO BERNICE
+insert into Movimento values (12, 44345, 00114, '11/06/2018', '11/07/2018', 503, -
+5000.00, 'pg.tit.bradesco')
+insert into Movimento values (12, 345, 002112, '11/01/2018', '11/01/2018', 001, 
+1000.01, 'efe, caixa')
+insert into Movimento values (12, 345, 002113, '11/01/2018', '11/01/2018', 002, 
+1000.00, 'efe, caixa')
+insert into Movimento values (12, 345, 002114, '11/02/2018', '11/02/2018', 503, -
+2000.00, 'term 123/44 11:00')
+insert into Movimento values (12, 345, 002115, '11/03/2018', '11/03/2018', 001, 
+2000.00, 'efe, caixa')
+insert into Movimento values (12, 345, 002116, '11/05/2018', '11/05/2018', 001, 
+50000.00, 'efe, caixa')
+insert into Movimento values (12, 345, 002117, '11/06/2018', '11/06/2018', 501, -
+50000.00, 'efe, caixa')
+insert into Movimento values (24, 2424, 003111, '11/01/2018', '11/01/2018', 001, 
+3000.01, 'efe, por kid bengala')
+insert into Movimento values (123, 12345, 002116, '11/02/2018', '11/02/2018', 003, 
+0000.01, 'ajuste capitalação')
+insert into Movimento values (123, 12345, 002116, '11/04/2018', '11/04/2018', 544, -
+3000.01, 'casas bahião')
+insert into Movimento values (123, 234345, 005111, '11/06/2018', '11/06/2018', 002, 
+23000.00, 'ch.bamerindus')
+--Os 'inserts' acima foram disponibilizados pelo Professor Dr. Paulo Roberto Bernice, 
+adicionando agora transações futuras: --
+insert into Movimento values (12, 44345, 00001, '11/01/2025', '11/01/2025', 001, 
+100.01, 'dep.envelope')
+insert into Movimento values (12, 44345, 00003, '11/01/2025', '11/01/2025', 001, -
+100.01, 'dep.envelope')
+CREATE PROCEDURE Extrato
+(
+@NumeroAgencia INT,
+FACULDADE DE TECNOLOGIA DE SÃO PAULO
+08 / 11 / 2023
+LABORATÓRIO DE BANCO DE DADOS
+PROFESSOR DR. PAULO ROBERTO BERNICE
+@NumeroConta INT,
+@NumeroCliente INT
+)
+AS
+BEGIN
+--Variáveis da Agencia--
+DECLARE @NomeAgencia VARCHAR(25);
+DECLARE @DataAtual DATE;
+DECLARE @HoraAtual TIME;
+SET @HoraAtual = CAST(GETDATE() AS TIME);
+SET @DataAtual = CAST(GETDATE() AS DATE);
+SELECT @NomeAgencia = NomeAgencia
+FROM Agencia
+WHERE @NumeroAgencia = NumeroAgencia
+------------------------------
+--Variáveis Do Cliente--
+DECLARE @CPG_CNPJ_Cliente VARCHAR(15);
+DECLARE @NomeCliente VARCHAR(35);
+FACULDADE DE TECNOLOGIA DE SÃO PAULO
+08 / 11 / 2023
+LABORATÓRIO DE BANCO DE DADOS
+PROFESSOR DR. PAULO ROBERTO BERNICE
+SELECT @CPG_CNPJ_Cliente = CPF_CNPJ_Cliente, @NomeCliente = 
+NomeCliente
+FROM Cliente
+WHERE @NumeroCliente = NumeroCliente
+-------------------------------
+--Impressão do Extrato
+PRINT REPLICATE('=', 80)
+PRINT ' '
+PRINT @NomeAgencia
+PRINT 'DATA: ' + CAST(@DataAtual AS VARCHAR(11)) + REPLICATE(' ', 
+6) + 'HORA: ' + CAST(@HoraAtual AS VARCHAR(5))
+PRINT 'CLIENTE: ' + LEFT(CAST(@NumeroCliente AS VARCHAR(46)) + 
+REPLICATE(' ',46),46) + 'CPF/CGC: ' + @CPG_CNPJ_Cliente
+PRINT 'Extrato de: AG. ' + LEFT(CAST(@NumeroAgencia AS 
+VARCHAR(39)) + REPLICATE(' ',39),39) + 'CONTA: ' + CAST(@NumeroConta AS 
+VARCHAR(15))
+PRINT ' '
+PRINT 'DATA' + REPLICATE(' ',6) + 'HISTÓRICO' + REPLICATE(' ',13) + 
+'DOCTO' + REPLICATE(' ', 6) + 'CRÉDITO(R$)' + REPLICATE(' ', 4) +
+'DÉBITO(R$)' + REPLICATE(' ', 3) + 'SALDO(R$)'
+PRINT ' ' 
+DECLARE @DataMovimentacao DATE;
+DECLARE @DataEfetivacao DATE;
+DECLARE @DescricaoHistorico VARCHAR(30);
+DECLARE @NumeroDocumento DECIMAL(11,0);
+FACULDADE DE TECNOLOGIA DE SÃO PAULO
+08 / 11 / 2023
+LABORATÓRIO DE BANCO DE DADOS
+PROFESSOR DR. PAULO ROBERTO BERNICE
+DECLARE @ValorOperacao DECIMAL(10,2);
+DECLARE @SaldoFinal DECIMAL(10,2);
+SET @SaldoFinal = 0;
+-- Declarando um Cursor que percorra a união de histórico e Movimento
+DECLARE CursorHistorico CURSOR FOR
+SELECT DataLancamento, DataEfetivacao, DescricaoHistorico, 
+NumeroDocumento, ValorLucro
+FROM Movimento full join Historico
+ON Movimento.CodigoHistorico = Historico.CodigoHistorico
+WHERE Movimento.NumeroAgencia = @NumeroAgencia AND 
+Movimento.NumeroConta = @NumeroConta;
+-- Iniciando Cursor--
+OPEN CursorHistorico;
+FETCH NEXT FROM CursorHistorico INTO @DataMovimentacao, 
+@DataEfetivacao, @DescricaoHistorico, @NumeroDocumento, @ValorOperacao;
+WHILE @@FETCH_STATUS = 0
+BEGIN
+--Imprimindo os Créditos--
+IF (@DataEfetivacao < @DataAtual) AND (@ValorOperacao > 0)
+BEGIN
+SET @SaldoFinal = @SaldoFinal + @ValorOperacao
+PRINT CAST(@DataMovimentacao AS VARCHAR(10)) +
+FACULDADE DE TECNOLOGIA DE SÃO PAULO
+08 / 11 / 2023
+LABORATÓRIO DE BANCO DE DADOS
+PROFESSOR DR. PAULO ROBERTO BERNICE
+REPLICATE(' ',2) +
+LEFT(@DescricaoHistorico + REPLICATE(' ',23),23) +
+LEFT(CAST(@NumeroDocumento AS VARCHAR(11)) + 
+REPLICATE(' ',7),7) +
+REPLICATE(' ',3) +
+LEFT(CAST(@ValorOperacao AS VARCHAR(11)) + 
+REPLICATE(' ',11),11) +
+REPLICATE(' ',15) +
+LEFT(CAST(@SaldoFinal AS VARCHAR(10)) + REPLICATE(' 
+',10),10)
+END
+ELSE
+--Imprimindo os Débitos--
+IF (@DataEfetivacao < @DataAtual) AND (@ValorOperacao <= 0)
+BEGIN
+SET @SaldoFinal = @SaldoFinal - @ValorOperacao
+PRINT CAST(@DataMovimentacao AS VARCHAR(10)) +
+REPLICATE(' ',2) +
+LEFT(@DescricaoHistorico + REPLICATE(' ',23),23) +
+LEFT(CAST(@NumeroDocumento AS VARCHAR(11)) + 
+REPLICATE(' ',7),7) +
+REPLICATE(' ',17) +
+LEFT(CAST(@ValorOperacao AS VARCHAR(11)) + 
+REPLICATE(' ',11),11) +
+REPLICATE(' ',1) +
+LEFT(CAST(@SaldoFinal AS VARCHAR(10)) + REPLICATE(' 
+',10),10)
+FACULDADE DE TECNOLOGIA DE SÃO PAULO
+08 / 11 / 2023
+LABORATÓRIO DE BANCO DE DADOS
+PROFESSOR DR. PAULO ROBERTO BERNICE
+END
+FETCH NEXT FROM CursorHistorico INTO @DataMovimentacao, 
+@DataEfetivacao, @DescricaoHistorico, @NumeroDocumento, @ValorOperacao;
+END
+CLOSE CursorHistorico;
+--Imprimindo Saldo Final--
+PRINT ' '
+PRINT REPLICATE(' ',58) + 'SALDO FINAL: ' + LEFT(CAST(@SaldoFinal 
+AS VARCHAR(10)) + REPLICATE(' ',10),10)
+PRINT ' '
+PRINT 'LANÇAMENTOS FUTUROS: '
+PRINT ' '
+--Fazendo Laço de Repetição para Lançamentos Futuros--
+PRINT 'DATA' + REPLICATE(' ',6) + 'HISTÓRICO' + REPLICATE(' ',13) + 
+'DOCTO' + REPLICATE(' ', 6) + 'CRÉDITO(R$)' + REPLICATE(' ', 4) + 
+'DÉBITO(R$)'
+PRINT ' '
+OPEN CursorHistorico;
+FETCH NEXT FROM CursorHistorico INTO @DataMovimentacao, 
+@DataEfetivacao, @DescricaoHistorico, @NumeroDocumento, @ValorOperacao;
+WHILE @@FETCH_STATUS = 0
+BEGIN
+FACULDADE DE TECNOLOGIA DE SÃO PAULO
+08 / 11 / 2023
+LABORATÓRIO DE BANCO DE DADOS
+PROFESSOR DR. PAULO ROBERTO BERNICE
+--Imprimido em caso de crédito--
+IF (@DataEfetivacao >= @DataAtual) AND (@ValorOperacao > 0)
+BEGIN
+SET @SaldoFinal = @SaldoFinal + @ValorOperacao
+PRINT CAST(@DataMovimentacao AS VARCHAR(10)) +
+REPLICATE(' ',2) +
+LEFT(@DescricaoHistorico + REPLICATE(' ',23),23) +
+LEFT(CAST(@NumeroDocumento AS VARCHAR(11)) + 
+REPLICATE(' ',7),7) +
+REPLICATE(' ',3) +
+LEFT(CAST(@ValorOperacao AS VARCHAR(11)) + 
+REPLICATE(' ',11),11)
+END
+ELSE
+--Imprimindo em caso de Débito--
+IF (@DataEfetivacao >= @DataAtual) AND (@ValorOperacao <= 0)
+BEGIN
+PRINT CAST(@DataMovimentacao AS VARCHAR(10)) +
+REPLICATE(' ',2) +
+LEFT(@DescricaoHistorico + REPLICATE(' ',23),23) +
+LEFT(CAST(@NumeroDocumento AS VARCHAR(11)) + 
+REPLICATE(' ',7),7) +
+REPLICATE(' ',17) +
+FACULDADE DE TECNOLOGIA DE SÃO PAULO
+08 / 11 / 2023
+LABORATÓRIO DE BANCO DE DADOS
+PROFESSOR DR. PAULO ROBERTO BERNICE
+LEFT(CAST(@ValorOperacao AS VARCHAR(11)) + 
+REPLICATE(' ',11),11)
+END
+FETCH NEXT FROM CursorHistorico INTO @DataMovimentacao, 
+@DataEfetivacao, @DescricaoHistorico, @NumeroDocumento, @ValorOperacao;
+END
+CLOSE CursorHistorico;
+DEALLOCATE CursorHistorico;
+PRINT REPLICATE('=', 80)
+END
+EXEC Extrato 12, 44345, 333
